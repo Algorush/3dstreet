@@ -8,21 +8,21 @@
 
 ### Online Tool
 
-|[Start 3DStreet](https://github.3dstreet.org/)|
+|[Start 3DStreet](https://3dstreet.app/)|
 |---|
 
-_(or visit https://github.3dstreet.org)_
+_(or visit https://3dstreet.app)_
 
+<img height="500" src="https://raw.githubusercontent.com/kfarr/streetmix3d/master/ui_assets/streetmix3d.jpg" />
 
+### [Quick Start - How to make your own 3DStreet scene from Streetmix. See documentation here.](https://www.3dstreet.org/docs/category/tutorial-use-streetmix-to-create-a-3dstreet-scene)
 
-<img src="https://raw.githubusercontent.com/kfarr/streetmix3d/master/ui_assets/streetmix3d.jpg" />
+## The rest of this README is for developers. [User-facing docs are here.](https://www.3dstreet.org/docs/)
 
-### Quick Start - How to make your own 3D street:
-* First, use <a href="https://streetmix.net">Streetmix.net</a> to create a street design. (Streetmix is a tool that lets you design, remix, and share your neighborhood street. <a href="https://github.com/streetmix/streetmix/blob/master/README.md#about">More information about Streetmix here</a>.)
-* Then, save a Streetmix street after making an account to generate a unique URL for your street looking something like this: `https://streetmix.net/kfarr/3/my-awesome-street-name`
-* Load https://github.3dstreet.org/, paste in your street URL, and press enter or the refresh button.
-* See your Streetmix street in 3D! See instant changes to your work: Switch back to a Streetmix.net tab, make changes to your street, then reload the 3DStreet page to see the edits applied.
-* For more information, please see our [3DStreet and Streetmix Tutorial](/tutorials/3DStreet-streetmix-tutorial.md).
+This repo is the 3DStreet Core Viewer. It provides parsing of JSON in Streetmix format into a 3DStreet scene. It also provides all of the core components needed for viewers. It is also a core dependency of the [3DStreet Editor hosted in a separate repository](https://github.com/3DStreet/3dstreet-editor).
+
+### Project Hosting Path
+This repo's main branch is hosted via github pages at `github.3dstreet.org`. The 3DStreet Editor uses this path to fetch 3DStreet dependencies. A-Frame developers leveraging 3DStreet Core will also use this path.
 
 ## A-Frame component
 3DStreet is built upon a custom A-Frame `street` component which is also available for you to customize for your own custom A-Frame street scenes. The `street` component takes a string of JSON and renders one or more "segments" (also known as lanes or slices) of a street and optionally buildings and ground to the left and right.
@@ -34,11 +34,11 @@ _(or visit https://github.3dstreet.org)_
 <html>
   <head>
     <title>Street Component!</title>
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/3dstreet@0.3.2/dist/aframe-street-component.js"></script>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/3dstreet@0.4.5/dist/aframe-street-component.js"></script>
   </head>  
   <body>
-    <a-scene gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/v1/decoders/;">
+    <a-scene>
       <a-entity id="mySimpleStreet" street streetmix-loader="streetmixStreetURL: https://streetmix.net/kfarr/3/" ></a-entity>
     </a-scene>
   </body>
@@ -67,13 +67,13 @@ The `intersection` component creates an intersection surface with options for ad
 | --------- | --------- | --------- |
 | dimensions | Specifies the width and depth of the intersection. First value represents width, second value represents depth. | '20 20' |
 | sidewalk | Sets the width of the sidewalk at each side of the intersection. Values are set in the order of west, east, north, south. |  '0 0 0 0' |
-| northeastcurb | Sets the curb dimensions for the north east curb. Values are updated as width, then depth. | '0 0' |
-| southwestcurb | Sets the curb dimensions for the south west curb. Values are updated as width, then depth.  | '0 0' |
-| southeastcurb | Sets the curb dimensions for the south east curb. Values are updated as width, then depth. | '0 0' |
-| northwestcurb | Sets the curb dimensions for the north west curb. Values are updated as width, then depth. | '0 0' |
+| northeastcurb | Sets the curb dimensions for the north east curb. Values are updated as width, then depth. | '4 4' |
+| southwestcurb | Sets the curb dimensions for the south west curb. Values are updated as width, then depth.  | '4 4' |
+| southeastcurb | Sets the curb dimensions for the south east curb. Values are updated as width, then depth. | '4 4' |
+| northwestcurb | Sets the curb dimensions for the north west curb. Values are updated as width, then depth. | '4 4' |
 | stopsign | Sets if each side of the intersection has a stop sign. Values are set in the order of east, west, north, south. 0 is false, 1 is true. | '0 0 0 0' |
-| trafficsignal | Sets if each side of the intersection has a traffic signal. Values are set in the order of east, west, north, south. 0 is false, 1 is true. | '0 0 0 0' |
-| crosswalk | ​​Sets if each side of the intersection has a crosswalk. Values are set in the order of east, west, north, south. 0 is false, 1 is true. | '0 0 0 0' |
+| trafficsignal | Sets if each side of the intersection has a traffic signal. Values are set in the order of east, west, north, south. 0 is false, 1 is true. | '1 1 1 1' |
+| crosswalk | ​​Sets if each side of the intersection has a crosswalk. Values are set in the order of east, west, north, south. 0 is false, 1 is true. | '1 1 1 1' |
 
 ### A-Frame `streetmix-loader` Component API
 
@@ -158,7 +158,7 @@ The 3DStreet codebase is offered under the GNU Affero General Public License v3,
 
 Assets such as 3D models, textures, and audio are offered under the [Creative Commons By Attribution Non-Commercial License](https://creativecommons.org/licenses/by-nc/4.0/), unless a more specific license is specified for each asset in the documentation on this page.
 
-Contact [k@3d.st](mailto:k@3d.st) for commercial licensing.
+Contact [kieran@3dstreet.org](mailto:kieran@3dstreet.org) for commercial licensing.
 
 ### Developer Docs
 See [this link for more information](src/README.md) about the custom components developed and modified for the project.
@@ -183,5 +183,8 @@ See [this link for more information](src/README.md) about the custom components 
 * Diesel idling bus https://www.soundsnap.com/turbodiesel_bus_riding_and_idling
 * Tram pass https://www.soundsnap.com/tram_pass_by_fast_wav
 * Historic streetcar pass https://www.soundsnap.com/streetcar_passing_by_smoothly
+
+### Skybox credits
+* Most skybox images (c) Polyhaven CC0 license polyhaven.com [individual credits](https://github.com/3DStreet/3dstreet/issues/360#issue-1910580549)
 
 <img src="https://raw.githubusercontent.com/kfarr/3dstreet/master/ui_assets/streetmix3d-banner.jpg" />

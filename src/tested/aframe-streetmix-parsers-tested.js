@@ -1,7 +1,16 @@
-function isSidewalk (string) { // eslint-disable-line no-unused-vars
+function isSidewalk(string) {
+  // eslint-disable-line no-unused-vars
   // https://streetmix.net/api/v1/streets/3f1a9810-0a8f-11ea-adff-7fe273b63f1d
   //  return if string sidewalk* or "scooter-drop-zone", bikeshare, flex-zone-curb, transit-shelter
-  const sidewalkList = ['utilities', 'scooter-drop-zone', 'bikeshare', 'flex-zone-curb', 'transit-shelter'];
+  const sidewalkList = [
+    'utilities',
+    'scooter-drop-zone',
+    'bikeshare',
+    'flex-zone-curb',
+    'transit-shelter',
+    'brt-station',
+    'street-vendor'
+  ];
   return string.startsWith('sidewalk') || sidewalkList.includes(string);
 }
 module.exports.isSidewalk = isSidewalk;
@@ -9,15 +18,16 @@ module.exports.isSidewalk = isSidewalk;
 // generate a JSON array representing buildings
 // test createBuildingsArray(maxLength = 5) returns [{ tag: 'a-entity', mixin: 'SM3D_Bld_Mixed_Corner_4fl', position: '0 0 0' }]
 // test createBuildingsArray(maxLength = 10) returns [{ mixin: "SM3D_Bld_Mixed_Corner_4fl", position: "0 0 0", tag: "a-entity" }, {mixin: "SM3D_Bld_Mixed_Double_5fl", position: "0 0 5", tag: "a-entity"} ]
-function createBuildingsArray (maxLength = 150, buildingType = 'narrow') { // eslint-disable-line no-unused-vars
+function createBuildingsArray(maxLength = 150, buildingType = 'narrow') {
+  // eslint-disable-line no-unused-vars
   var buildings, psuedoRandom;
   if (buildingType === 'narrow' || buildingType === 'wide') {
     buildings = [
-      { id: 'SM3D_Bld_Mixed_4fl', width: 5.25221 },
+      { id: 'SM3D_Bld_Mixed_4fl', width: 5.251 },
       { id: 'SM3D_Bld_Mixed_Double_5fl', width: 10.9041 },
-      { id: 'SM3D_Bld_Mixed_4fl_2', width: 5.58889 },
-      { id: 'SM3D_Bld_Mixed_5fl', width: 6.47593 },
-      { id: 'SM3D_Bld_Mixed_Corner_4fl', width: 6.94809 }
+      { id: 'SM3D_Bld_Mixed_4fl_2', width: 5.309 },
+      { id: 'SM3D_Bld_Mixed_5fl', width: 5.903 },
+      { id: 'SM3D_Bld_Mixed_Corner_4fl', width: 5.644 }
     ];
     psuedoRandom = '41431323432402434130303230234102402341'; // 38 psuedorandom numbers 0-4, no identical units side-by-side
   } else if (buildingType === 'residential') {
@@ -27,6 +37,16 @@ function createBuildingsArray (maxLength = 150, buildingType = 'narrow') { // es
       { id: 'SM_Bld_House_Preset_09_1845', width: 20 }
     ];
     psuedoRandom = '12021201210101212021201012012021201210'; // 38 psuedorandom numbers 0-2, no identical units side-by-side
+  } else if (buildingType === 'arcade') {
+    buildings = [
+      { id: 'arched-building-01', width: 9.191 },
+      { id: 'arched-building-02', width: 11.19 },
+      { id: 'arched-building-03', width: 13.191 },
+      { id: 'arched-building-04', width: 15.191 }
+    ];
+    psuedoRandom = '03120223130210321203123023103201232013'; // 38 psuedorandom numbers 0-3, no identical units side-by-side
+  } else {
+    return [];
   }
 
   var i = 0;
@@ -46,6 +66,7 @@ function createBuildingsArray (maxLength = 150, buildingType = 'narrow') { // es
       buildingEntity.child = {
         tag: 'a-plane',
         class: 'driveway',
+        material: 'roughness:0.8',
         position: '-6.25 0.6 -8.75',
         rotation: '-90 0 0',
         src: '#asphalt-texture',
@@ -58,6 +79,7 @@ function createBuildingsArray (maxLength = 150, buildingType = 'narrow') { // es
       buildingEntity.child = {
         tag: 'a-plane',
         class: 'driveway',
+        material: 'roughness:0.8',
         position: '-2.5 0.6 -7',
         rotation: '-90 0 0',
         src: '#asphalt-texture',
@@ -65,7 +87,9 @@ function createBuildingsArray (maxLength = 150, buildingType = 'narrow') { // es
         height: 8
       };
     }
-    buildingsArray.push(buildingEntity);
+    if (building.width + length <= maxLength) {
+      buildingsArray.push(buildingEntity);
+    }
 
     length += building.width;
     i++;
@@ -76,7 +100,8 @@ function createBuildingsArray (maxLength = 150, buildingType = 'narrow') { // es
 module.exports.createBuildingsArray = createBuildingsArray;
 
 // for an array of objects representing HTML, remove entities except those that match the mixinId specified
-function filterBuildingsArrayByMixin (buildingsArray, mixinId) { // eslint-disable-line no-unused-vars
+function filterBuildingsArrayByMixin(buildingsArray, mixinId) {
+  // eslint-disable-line no-unused-vars
   var filteredBuildingsArray = [];
   buildingsArray.forEach((currentEntity, index) => {
     if (currentEntity.mixin === mixinId) {
@@ -88,7 +113,8 @@ function filterBuildingsArrayByMixin (buildingsArray, mixinId) { // eslint-disab
 module.exports.filterBuildingsArrayByMixin = filterBuildingsArrayByMixin;
 
 // for an array of objects representing HTML, for each object remove the property matching the passed string `key`
-function removePropertyFromArray (htmlArray, key) { // eslint-disable-line no-unused-vars
+function removePropertyFromArray(htmlArray, key) {
+  // eslint-disable-line no-unused-vars
   htmlArray.forEach((currentEntity, index) => {
     delete currentEntity[key];
   });
@@ -96,10 +122,18 @@ function removePropertyFromArray (htmlArray, key) { // eslint-disable-line no-un
 }
 module.exports.removePropertyFromArray = removePropertyFromArray;
 
-function createClonedEntitiesArray ({ mixin = '', step = 15, radius = 60, rotation = '0 0 0', positionXYString = '0 0', randomY = false }) { // eslint-disable-line no-unused-vars
+function createClonedEntitiesArray({
+  mixin = '',
+  step = 15,
+  radius = 60,
+  rotation = '0 0 0',
+  positionXYString = '0 0',
+  randomY = false
+}) {
+  // eslint-disable-line no-unused-vars
   var clonedEntitiesArray = [];
 
-  for (var j = (radius * -1); j <= radius; j = j + step) {
+  for (var j = radius * -1; j <= radius; j = j + step) {
     var clonedEntity = {
       tag: 'a-entity',
       position: positionXYString + ' ' + j
@@ -124,7 +158,8 @@ function createClonedEntitiesArray ({ mixin = '', step = 15, radius = 60, rotati
 module.exports.createClonedEntitiesArray = createClonedEntitiesArray;
 
 // TODO: rename to createAmbientSoundsArray
-function getAmbientSoundJSON (buildingsArray) { // eslint-disable-line no-unused-vars
+function getAmbientSoundJSON(buildingsArray) {
+  // eslint-disable-line no-unused-vars
   const ambientSounds = {
     fence: '#suburbs-mp3',
     grass: '#suburbs-mp3',
@@ -139,11 +174,16 @@ function getAmbientSoundJSON (buildingsArray) { // eslint-disable-line no-unused
   var prevURL = null;
   buildingsArray.forEach((currentValue, index) => {
     // <a-entity class="playme" sound="src: #ambientmp3; positional: false; loop: true;"></a-entity>
-    if (prevURL && (prevURL === ambientSounds[currentValue])) { return; }
+    if (prevURL && prevURL === ambientSounds[currentValue]) {
+      return;
+    }
     var soundEntity = {
       tag: 'a-entity',
       class: 'playme',
-      sound: 'src: ' + ambientSounds[currentValue] + '; positional: false; loop: true'
+      sound:
+        'src: ' +
+        ambientSounds[currentValue] +
+        '; positional: false; loop: true'
     };
     soundsArray.push(soundEntity);
     prevURL = ambientSounds[currentValue];
@@ -151,30 +191,3 @@ function getAmbientSoundJSON (buildingsArray) { // eslint-disable-line no-unused
   return soundsArray;
 }
 module.exports.getAmbientSoundJSON = getAmbientSoundJSON;
-
-// possible input values: grass, fence, narrow, wide, waterfront, residential, parking-lot
-function createGroundArray (buildingString, length) { // eslint-disable-line no-unused-vars
-  const repeatY = length / 30;
-  var repeatX = 1;
-  var groundArray = [];
-  var mixin = 'ground-grass'; // default output is grass ground type
-
-  if (buildingString === 'waterfront') { return groundArray; }
-  if (['narrow', 'wide'].includes(buildingString)) { mixin = 'ground-asphalt'; }
-  if (buildingString === 'parking-lot') {
-    mixin = 'ground-parking-lot';
-    repeatX = 0.5;
-  }
-
-  var groundEntity = {
-    tag: 'a-entity',
-    position: '0 -0.2 0',
-    mixin: mixin,
-    geometry: 'height: ' + length + ';',
-    material: 'repeat: ' + repeatX + ' ' + repeatY + ';'
-  };
-  groundArray.push(groundEntity);
-
-  return groundArray;
-}
-module.exports.createGroundArray = createGroundArray;
