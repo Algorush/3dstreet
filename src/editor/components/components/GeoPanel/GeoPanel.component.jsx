@@ -13,7 +13,9 @@ const GeoPanel = () => {
   const { currentUser } = useAuthContext();
   const onClick = () => {
     posthog.capture('geo_panel_clicked');
-    if (currentUser.isPro) {
+    if (!currentUser) {
+      Events.emit('opensigninmodal');
+    } else if (currentUser.isPro) {
       Events.emit('opengeomodal');
     } else {
       Events.emit('openpaymentmodal');
@@ -24,20 +26,17 @@ const GeoPanel = () => {
   let coordinateInfo = null;
 
   if (streetGeo) {
-    coordinateInfo = `Latitude: ${streetGeo.latitude}, Longitude: ${streetGeo.longitude}, Elevation: ${streetGeo.elevation}m`;
+    coordinateInfo = `Latitude: ${streetGeo.latitude}, Longitude: ${streetGeo.longitude}, Elevation: ${streetGeo.ellipsoidalHeight}m`;
   }
 
   return (
     <div className={styles.geo}>
-      <>
-        <img src={GeoImg} onClick={onClick} alt="geo" />
-        {coordinateInfo ? (
-          <a onClick={onClick}>{coordinateInfo}</a>
-        ) : (
-          <a onClick={onClick}>Click to set location</a>
-        )}
-      </>
-      )
+      <img src={GeoImg} onClick={onClick} alt="geo" />
+      {coordinateInfo ? (
+        <a onClick={onClick}>{coordinateInfo}</a>
+      ) : (
+        <a onClick={onClick}>Click to set location</a>
+      )}
     </div>
   );
 };
