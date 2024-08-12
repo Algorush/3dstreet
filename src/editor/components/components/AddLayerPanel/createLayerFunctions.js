@@ -19,9 +19,15 @@ function createSvgExtrudedEntity() {
     newEl.setAttribute('svg-extruder', `svgString: ${svgString}`);
     newEl.setAttribute('data-layer-name', 'SVG Path • My Custom Path');
     const parentEl = document.querySelector('#street-container');
+    newEl.addEventListener(
+      'loaded',
+      () => {
+        Events.emit('entitycreated', newEl);
+        AFRAME.INSPECTOR.selectEntity(newEl);
+      },
+      { once: true }
+    );
     parentEl.appendChild(newEl);
-    // update sceneGraph
-    Events.emit('entitycreated', newEl);
   }
 }
 
@@ -81,7 +87,7 @@ function create3DTiles() {
     const geoLayer = document.getElementById('reference-layers');
     let latitude = 0;
     let longitude = 0;
-    let elevation = 0;
+    let ellipsoidalHeight = 0;
     const streetGeo = document
       .getElementById('reference-layers')
       ?.getAttribute('street-geo');
@@ -89,13 +95,13 @@ function create3DTiles() {
     if (streetGeo && streetGeo['latitude'] && streetGeo['longitude']) {
       latitude = roundCoord(parseFloat(streetGeo['latitude']));
       longitude = roundCoord(parseFloat(streetGeo['longitude']));
-      elevation = parseFloat(streetGeo['elevation']) || 0;
+      ellipsoidalHeight = parseFloat(streetGeo['ellipsoidalHeight']) || 0;
     }
 
     geoLayer.setAttribute(
       'street-geo',
       `
-      latitude: ${latitude}; longitude: ${longitude}; elevation: ${elevation}; maps: google3d
+      latitude: ${latitude}; longitude: ${longitude}; ellipsoidalHeight: ${ellipsoidalHeight}; maps: google3d
     `
     );
     // update sceneGraph
@@ -128,9 +134,15 @@ function createCustomModel() {
     newEl.setAttribute('gltf-model', `url(${modelUrl})`);
     newEl.setAttribute('data-layer-name', 'glTF Model • My Custom Object');
     const parentEl = document.querySelector('#street-container');
+    newEl.addEventListener(
+      'loaded',
+      () => {
+        Events.emit('entitycreated', newEl);
+        AFRAME.INSPECTOR.selectEntity(newEl);
+      },
+      { once: true }
+    );
     parentEl.appendChild(newEl);
-    // update sceneGraph
-    Events.emit('entitycreated', newEl);
   }
 }
 
@@ -144,9 +156,15 @@ function createPrimitiveGeometry() {
   );
   newEl.setAttribute('material', 'src: #asphalt-texture; repeat: 5 5;');
   const parentEl = document.querySelector('#street-container');
+  newEl.addEventListener(
+    'loaded',
+    () => {
+      Events.emit('entitycreated', newEl);
+      AFRAME.INSPECTOR.selectEntity(newEl);
+    },
+    { once: true }
+  );
   parentEl.appendChild(newEl);
-  // update sceneGraph
-  Events.emit('entitycreated', newEl);
 }
 
 function createIntersection() {
@@ -155,9 +173,15 @@ function createIntersection() {
   newEl.setAttribute('data-layer-name', 'Street • Intersection 90º');
   newEl.setAttribute('rotation', '-90 -90 0');
   const parentEl = document.querySelector('#street-container');
+  newEl.addEventListener(
+    'loaded',
+    () => {
+      Events.emit('entitycreated', newEl);
+      AFRAME.INSPECTOR.selectEntity(newEl);
+    },
+    { once: true }
+  );
   parentEl.appendChild(newEl);
-  // update sceneGraph
-  Events.emit('entitycreated', newEl);
 }
 
 function createSplatObject() {
@@ -176,9 +200,15 @@ function createSplatObject() {
     newEl.setAttribute('data-layer-name', 'Splat Model • My Custom Object');
     newEl.play();
     const parentEl = document.querySelector('#street-container');
+    newEl.addEventListener(
+      'loaded',
+      () => {
+        Events.emit('entitycreated', newEl);
+        AFRAME.INSPECTOR.selectEntity(newEl);
+      },
+      { once: true }
+    );
     parentEl.appendChild(newEl);
-    // update sceneGraph
-    Events.emit('entitycreated', newEl);
   }
 }
 
