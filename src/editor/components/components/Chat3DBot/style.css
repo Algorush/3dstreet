@@ -1,0 +1,114 @@
+.react-chatbot-kit-chat-container {
+  height: 100vh;
+  position: relative;
+}
+
+.react-chatbot-kit-chat-message-container {
+  height: 65vh;
+}
+
+.react-chatbot-kit-chat-input-container {
+  height: 20vh;
+}
+
+.react-chatbot-kit-chat-input {
+  width: auto;
+}
+
+.react-chatbot-kit-chat-btn-send {
+  align-self: center;
+  width: 100%;
+}
+
+.react-chatbot-kit-chat-bot-message {
+  font-size: 0.8rem;
+}
+.react-chatbot-kit-chat-input-form {
+  flex-direction: column;
+}
+
+.Chat3DBot {
+    position: relative;
+    height: 100vh;
+    z-index: 10;
+  }
+  
+  .ChatIcon {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    z-index: 8;
+  }
+  
+  .ChatContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Chatbot__header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .CloseButton {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .Chatbot__messages {
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
+  .Chatbot__input {
+    display: flex;
+    padding: 10px;
+  }
+  
+  .Chat3DBot textarea {
+    width: 90%;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    color: #000 !important;
+    background-color: #fff !important;
+    font-size: 0.9rem;
+    white-space: pre-wrap; 
+  }
+  
+  .Chat3DBot button {
+    padding: 10px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
